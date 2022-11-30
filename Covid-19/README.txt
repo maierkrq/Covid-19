@@ -1,0 +1,3 @@
+Code can be found in file "epidemic-models.py". If you run the file directly, the necessary functions will be evaluated. Some output will be printed to the terminal, e.g., the parameters of the models. All with matplotlib created figures will be saved to the same folder which contains "epidemic-models.py". All necessary comments are in the file "epidemic-models.py". The second sheet of excel file "Fallzahlen_Gesamtuebersicht" is used as a data set.
+
+My Python version: 3.9.5.
