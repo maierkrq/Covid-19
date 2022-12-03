@@ -1,6 +1,8 @@
 # epidemic-models.py
 # created by Kristina Maier 
 # on November 30, 2022
+# edited on Dezember 03, 2022
+# changes: p0 in line 304 and plotting style 
 
 import pandas as pd
 from scipy.integrate import odeint
@@ -159,9 +161,11 @@ def fit_SEIRD(t, alpha, beta, gamma, delta):
 
     Output:
         numpy.ndarray
+    
     # N = S+E+I+R+D
     return odeint(SEIRD, SEIRD_0, t, args=(alpha, beta, gamma, delta, N)).T.flatten()
 '''
+
 
 if __name__ == '__main__':
     num_days_to_model = 365 # how many days to model
@@ -213,31 +217,41 @@ if __name__ == '__main__':
         fitted = fit_SIR(x_data, *popt).reshape((3, num_days_to_model))
 
         # plotting all data
-        fig1 = plt.figure()
-        plt.title("SIR model for state ID {0}".format(state_nr+1)) 
-        plt.plot(x_data, S, '-o', label="real data, S")
-        plt.plot(x_data, I, '-o', label="real data, I")
-        plt.plot(x_data, R, '-o', label="real data, R")
-        plt.plot(x_data, fitted[0], label="fitted data, S")
-        plt.plot(x_data, fitted[1], label="fitted data, I")
-        plt.plot(x_data, fitted[2], label="fitted data, R")
-        plt.ylabel("number of people")
-        plt.xlabel("days")
-        plt.legend()
-        plt.savefig("SIR-model-for-state-id-{0}.png".format(state_nr+1))
+        fsize = 45 #fontsize
+        lwidth = 3
+        fig1 = plt.figure(figsize=(20,10))
+        #plt.title("SIR model for state ID {0}".format(state_nr+1)) 
+        plt.plot(x_data, S, '-o', label="real data, S", linewidth=lwidth)
+        plt.plot(x_data, I, '-o', label="real data, I", linewidth=lwidth)
+        plt.plot(x_data, R, '-o', label="real data, R", linewidth=lwidth)
+        plt.plot(x_data, fitted[0], label="fitted data, S", linewidth=lwidth)
+        plt.plot(x_data, fitted[1], label="fitted data, I", linewidth=lwidth)
+        plt.plot(x_data, fitted[2], label="fitted data, R", linewidth=lwidth)
+        plt.ylabel("number of people", fontsize=fsize)
+        plt.xlabel("days", fontsize=fsize)
+        plt.legend(fontsize=fsize)
+        y_ticks = plt.yticks()[0]
+        plt.yticks(ticks=y_ticks, fontsize=fsize)
+        x_ticks = plt.xticks()[0]
+        plt.xticks(ticks=x_ticks, fontsize=fsize)
+        plt.savefig("SIR-model-for-state-id-{0}.png".format(state_nr+1), bbox_inches='tight')
         plt.close(fig1)
         # What do you observe? -> The infection curve is too small in relation to the population size, 
         # but the fitting looks good from a distance.
 
         # plotting only infection curve
-        fig2 = plt.figure()
-        plt.title("SIR model for state ID {0}".format(state_nr+1))
-        plt.plot(x_data, I, '-o', label="real data, I")
-        plt.plot(x_data, fitted.reshape((3,365))[1], label="fitted data, I")
-        plt.ylabel("number of infected")
-        plt.xlabel("days")
-        plt.legend()
-        plt.savefig("partial-plot-SIR-model-for-state-id-{0}.png".format(state_nr+1))
+        fig2 = plt.figure(figsize=(20,10))
+        #plt.title("SIR model for state ID {0}".format(state_nr+1))
+        plt.plot(x_data, I, '-o', label="real data, I", linewidth=lwidth)
+        plt.plot(x_data, fitted.reshape((3,365))[1], label="fitted data, I", linewidth=lwidth)
+        plt.ylabel("number of infected", fontsize=fsize)
+        plt.xlabel("days", fontsize=fsize)
+        plt.legend(fontsize=fsize)
+        y_ticks = plt.yticks()[0]
+        plt.yticks(ticks=y_ticks, fontsize=fsize)
+        x_ticks = plt.xticks()[0]
+        plt.xticks(ticks=x_ticks, fontsize=fsize)
+        plt.savefig("partial-plot-SIR-model-for-state-id-{0}.png".format(state_nr+1), bbox_inches='tight')
         plt.close(fig2)
         ## What do you observe? -> The fitted infection curve is bigger than the real data for infected. The fitting 
         # does not look good anymore up close. Also, the data points jump.
@@ -251,14 +265,18 @@ if __name__ == '__main__':
         print("Parameters: infection rate ", popt[0]) #, ", removed ", popt[1]) 
         fitted = fit_SIR_infected(x_data, *popt)
 
-        fig3 = plt.figure()
-        plt.title("SIR model for state ID {0}".format(state_nr+1))
-        plt.plot(x_data, I, '-o', label="real data, I")
-        plt.plot(x_data, fitted, label="fitted data, I")
-        plt.ylabel("number of infected")
-        plt.xlabel("days")
-        plt.legend()
-        plt.savefig("infected-SIR-model-for-state-id-{0}.png".format(state_nr+1))
+        fig3 = plt.figure(figsize=(20,10))
+        #plt.title("SIR model for state ID {0}".format(state_nr+1))
+        plt.plot(x_data, I, '-o', label="real data, I", linewidth=lwidth)
+        plt.plot(x_data, fitted, label="fitted data, I", linewidth=lwidth)
+        plt.ylabel("number of infected", fontsize=fsize)
+        plt.xlabel("days", fontsize=fsize)
+        plt.legend(fontsize=fsize)
+        y_ticks = plt.yticks()[0]
+        plt.yticks(ticks=y_ticks, fontsize=fsize)
+        x_ticks = plt.xticks()[0]
+        plt.xticks(ticks=x_ticks, fontsize=fsize)
+        plt.savefig("infected-SIR-model-for-state-id-{0}.png".format(state_nr+1), bbox_inches='tight')
         plt.close(fig3)
 
         # Further, the model is quite simple and the can be extended. Consider, e.g., exposed (E) or dead (D) individuals.
@@ -283,20 +301,24 @@ if __name__ == '__main__':
         y_data = np.array(df_new_cases.iloc[state_nr])
         y_all_data.append(y_data)
     y_all_data_new = np.array(y_all_data).flatten()
-    popt, _ = curve_fit(fit_SIR_patches, x_data, y_all_data_new, bounds=(0, np.inf))
+    popt, _ = curve_fit(fit_SIR_patches, x_data, y_all_data_new, bounds=(0, np.inf), p0=[popt[0]/3]*9 + [popt[1]]*3) # 03.12.22 change: added p0
     print("Parameters: ", popt)
     fitted = fit_SIR_patches(x_data, *popt).reshape((num_states,num_days_to_model))
     y_all_data_new_shaped = y_all_data_new.reshape((num_states,num_days_to_model))
 
     for state_nr in range(num_states):
-        fig_new = plt.figure()
-        plt.title("SIR model with three patches for state ID {0}".format(state_nr+1))
-        plt.plot(x_data, y_all_data_new_shaped[state_nr,:], '-o', label="real data, I")
-        plt.plot(x_data, fitted[state_nr,:], label="fitted data, I")
-        plt.ylabel("number of infected")
-        plt.xlabel("days")
-        plt.legend()
-        plt.savefig("infected-SIR-model-patches-state-id-{0}.png".format(state_nr+1))
+        fig_new = plt.figure(figsize=(20,10))
+        #plt.title("SIR model with three patches for state ID {0}".format(state_nr+1))
+        plt.plot(x_data, y_all_data_new_shaped[state_nr,:], '-o', label="real data, I", linewidth=lwidth)
+        plt.plot(x_data, fitted[state_nr,:], label="fitted data, I", linewidth=lwidth)
+        plt.ylabel("number of infected", fontsize=fsize)
+        plt.xlabel("days", fontsize=fsize)
+        plt.legend(fontsize=fsize)
+        y_ticks = plt.yticks()[0]
+        plt.yticks(ticks=y_ticks, fontsize=fsize)
+        x_ticks = plt.xticks()[0]
+        plt.xticks(ticks=x_ticks, fontsize=fsize)
+        plt.savefig("infected-SIR-model-patches-state-id-{0}.png".format(state_nr+1), bbox_inches='tight')
         plt.close(fig_new)
 
 
@@ -308,12 +330,16 @@ if __name__ == '__main__':
     print("Parameters: ", popt)
     fitted = fit_SIR_infected(x_data, *popt)
 
-    fig_4 = plt.figure()
-    plt.title("SIR model with three patches for all states with ID {0}, {1}, {2}".format(*range(num_states)))
-    plt.plot(x_data, I_sum, '-o', label="real data, I")
-    plt.plot(x_data, fitted, label="fitted data, I")
-    plt.ylabel("number of infected")
-    plt.xlabel("days")
-    plt.legend()
-    plt.savefig("infected-SIR-model-patches-all-states-id-{0}-{1}-{2}.png".format(*range(num_states)))
+    fig_4 = plt.figure(figsize=(20,10))
+    #plt.title("SIR model with three patches for all states with ID {0}, {1}, {2}".format(*range(num_states)))
+    plt.plot(x_data, I_sum, '-o', label="real data, I", linewidth=lwidth)
+    plt.plot(x_data, fitted, label="fitted data, I", linewidth=lwidth)
+    plt.ylabel("number of infected", fontsize=fsize)
+    plt.xlabel("days", fontsize=fsize)
+    plt.legend(fontsize=fsize)
+    y_ticks = plt.yticks()[0]
+    plt.yticks(ticks=y_ticks, fontsize=fsize)
+    x_ticks = plt.xticks()[0]
+    plt.xticks(ticks=x_ticks, fontsize=fsize)
+    plt.savefig("infected-SIR-model-patches-all-states-id-{0}-{1}-{2}.png".format(*range(num_states)), bbox_inches='tight')
     plt.close(fig_4)
